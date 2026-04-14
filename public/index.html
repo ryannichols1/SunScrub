@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunScrub — Solar Panel Cleaning Dublin</title>
+  <meta name="description" content="SunScrub — Dublin's solar panel cleaning crew. Restore up to 25% lost energy. Fully insured, eco-friendly. €39 callout + €7 per panel." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:         #FAFAF7;
+      --bg-warm:    #F4F1EB;
+      --bg-card:    #FFFFFF;
+      --sun:        #F59E0B;
+      --sun-deep:   #D97706;
+      --sun-glow:   #FCD34D;
+      --scrub:      #0D9488;
+      --scrub-deep: #0F766E;
+      --scrub-light:#CCFBF1;
+      --ink:        #1C1917;
+      --ink-mid:    #57534E;
+      --ink-light:  #A8A29E;
+      --ink-faint:  #D6D3D1;
+      --white:      #FFFFFF;
+      --red-soft:   #FEE2E2;
+      --red:        #EF4444;
+      --ff-display: 'Fraunces', Georgia, serif;
+      --ff-body:    'Sora', system-ui, sans-serif;
+      --radius:     12px;
+      --radius-lg:  20px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--ff-body); background: var(--bg); color: var(--ink-mid);
+      line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: var(--ff-body); cursor: pointer; }
+
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+    @keyframes slideUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes pulse { 0%,100% { opacity:.4 } 50% { opacity:1 } }
+    @keyframes countUp { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
+
+    .reveal { opacity:0; transform:translateY(40px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ===== NAV ===== */
+    .nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      padding:14px 32px; display:flex; align-items:center; justify-content:space-between;
+      transition: all .4s;
+    }
+    .nav.scrolled {
+      background:rgba(250,250,247,.92); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--ink-faint); box-shadow:0 1px 12px rgba(0,0,0,.04);
+    }
+    .logo { display:flex; align-items:center; gap:10px; font-family:var(--ff-display); font-size:24px; font-weight:800; color:var(--ink); }
+    .logo-sun { color:var(--sun); }
+    .logo-icon {
+      width:36px; height:36px; background:var(--sun); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 0 0 4px rgba(245,158,11,.15);
+    }
+    .logo-icon svg { width:20px; height:20px; }
+    .nav-links { display:flex; gap:28px; align-items:center; }
+    .nav-links a { color:var(--ink-mid); font-size:14px; font-weight:500; transition:color .2s; }
+    .nav-links a:hover { color:var(--scrub); }
+    .btn-primary {
+      background:var(--ink); color:var(--white); border:none; border-radius:100px;
+      padding:11px 28px; font-weight:600; font-size:14px; transition:all .3s;
+    }
+    .btn-primary:hover { background:var(--scrub-deep); transform:translateY(-2px); box-shadow:0 6px 20px rgba(13,148,136,.25); }
+    .btn-outline {
+      background:transparent; border:2px solid var(--ink-faint); color:var(--ink);
+      border-radius:100px; padding:10px 28px; font-weight:600; font-size:14px; transition:all .3s;
+    }
+    .btn-outline:hover { border-color:var(--scrub); color:var(--scrub); }
+
+    /* ===== HERO ===== */
+    .hero {
+      position:relative; min-height:100vh; display:flex; align-items:center;
+      justify-content:center; text-align:center; padding:140px 24px 100px; overflow:hidden;
+    }
+    .hero-blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:.35; pointer-events:none; }
+    .hero-blob-1 { width:500px; height:500px; background:var(--sun-glow); top:-10%; left:-5%; }
+    .hero-blob-2 { width:400px; height:400px; background:var(--scrub-light); bottom:-5%; right:-5%; }
+    .hero-blob-3 { width:300px; height:300px; background:#FEF3C7; top:30%; right:15%; }
+    .hero-content { position:relative; z-index:2; max-width:760px; }
+    .hero-pill {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--white); border:1px solid var(--ink-faint);
+      border-radius:100px; padding:6px 18px 6px 8px; margin-bottom:32px;
+      font-size:13px; color:var(--ink-mid); font-weight:500;
+      box-shadow:0 2px 8px rgba(0,0,0,.04); animation:slideUp .7s ease;
+    }
+    .hero-pill-dot { width:8px; height:8px; border-radius:50%; background:var(--scrub); animation:pulse 2s infinite; }
+    .hero h1 {
+      font-family:var(--ff-display); font-size:clamp(42px,7vw,76px); font-weight:800;
+      line-height:1.05; color:var(--ink); margin-bottom:24px; animation:slideUp .7s ease .1s both;
+    }
+    .hero h1 .highlight { position:relative; color:var(--scrub-deep); }
+    .hero h1 .highlight::after {
+      content:''; position:absolute; bottom:4px; left:-2%; right:-2%;
+      height:8px; background:var(--sun-glow); border-radius:4px; z-index:-1; opacity:.6;
+    }
+    .hero p {
+      font-size:18px; line-height:1.7; color:var(--ink-mid);
+      max-width:520px; margin:0 auto 40px; animation:slideUp .7s ease .2s both;
+    }
+    .hero-actions {
+      display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+      animation:slideUp .7s ease .3s both;
+    }
+    .hero-actions .btn-primary { padding:15px 36px; font-size:16px; }
+    .stat-strip {
+      display:flex; gap:48px; justify-content:center; margin-top:72px; flex-wrap:wrap;
+      animation:slideUp .7s ease .5s both;
+    }
+    .stat { text-align:center; }
+    .stat-num { font-family:var(--ff-display); font-size:38px; font-weight:800; color:var(--ink); }
+    .stat-label { font-size:13px; color:var(--ink-light); margin-top:2px; font-weight:500; }
+
+    /* ===== SHARED ===== */
+    .section { padding:100px 24px; max-width:1100px; margin:0 auto; }
+    .section-eyebrow { font-size:12px; text-transform:uppercase; letter-spacing:.18em; color:var(--scrub); font-weight:700; margin-bottom:12px; }
+    .section-title { font-family:var(--ff-display); font-size:clamp(28px,4vw,44px); color:var(--ink); margin-bottom:16px; line-height:1.12; font-weight:700; }
+    .section-sub { font-size:16px; color:var(--ink-mid); max-width:560px; line-height:1.65; margin-bottom:52px; }
+    .divider { max-width:1100px; margin:0 auto; height:1px; background:linear-gradient(90deg,transparent,var(--ink-faint),transparent); }
+
+    /* ===== FEATURES ===== */
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; }
+    .feature-card {
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:32px 28px; transition:all .35s;
+    }
+    .feature-card:hover { border-color:var(--scrub); transform:translateY(-6px); box-shadow:0 12px 32px rgba(13,148,136,.08); }
+    .feature-icon {
+      width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+    }
+    .fi-water { background:#ECFEFF; }
+    .fi-bolt { background:#FEF9C3; }
+    .fi-shield { background:#F0FDF4; }
+    .fi-camera { background:#FFF7ED; }
+    .fi-leaf { background:#F0FDF4; }
+    .fi-clock { background:#EFF6FF; }
+    .feature-card h4 { font-size:17px; color:var(--ink); margin-bottom:8px; font-weight:600; }
+    .feature-card p { font-size:14px; color:var(--ink-mid); line-height:1.6; }
+
+    /* ===== DIRTY TRUTH (problem section) ===== */
+    .truth-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+    .truth-list { list-style:none; display:flex; flex-direction:column; gap:20px; }
+    .truth-list li {
+      display:flex; gap:14px; align-items:flex-start;
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius); padding:20px;
+    }
+    .truth-icon {
+      width:40px; height:40px; min-width:40px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px;
+    }
+    .truth-icon.bad { background:var(--red-soft); }
+    .truth-icon.good { background:var(--scrub-light); }
+    .truth-list li h4 { font-size:15px; color:var(--ink); font-weight:600; margin-bottom:4px; }
+    .truth-list li p { font-size:13px; color:var(--ink-mid); line-height:1.5; }
+    .truth-visual {
+      background:var(--bg-warm); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:48px 32px; text-align:center;
+    }
+    .truth-visual-big {
+      font-family:var(--ff-display); font-size:clamp(64px,10vw,96px);
+      font-weight:800; color:var(--ink); line-height:1;
+    }
+    .truth-visual-big span { color:var(--red); }
+    .truth-visual p { font-size:15px; color:var(--ink-mid); margin-top:12px; max-width:280px; margin-left:auto; margin-right:auto; line-height:1.5; }
+
+    /* ===== HOW OFTEN ===== */
+    .frequency-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+    .freq-card {
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:32px 28px; transition:all .35s;
+    }
+    .freq-card:hover { border-color:var(--sun); transform:translateY(-4px); box-shadow:0 8px 24px rgba(245,158,11,.08); }
+    .freq-badge {
+      display:inline-block; padding:4px 12px; border-radius:100px; font-size:11px;
+      font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:16px;
+    }
+    .freq-badge.residential { background:#DBEAFE; color:#1D4ED8; }
+    .freq-badge.coastal { background:#FEF3C7; color:#92400E; }
+    .freq-badge.farm { background:#D1FAE5; color:#065F46; }
+    .freq-card h4 { font-size:18px; color:var(--ink); font-weight:700; margin-bottom:8px; }
+    .freq-card p { font-size:14px; color:var(--ink-mid); line-height:1.6; }
+
+    /* ===== PRICING CALCULATOR ===== */
+    .calc-wrapper { display:grid; grid-template-columns:1fr; gap:32px; max-width:600px; }
+    .calc-card {
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:40px 36px; 
+      box-shadow:0 4px 24px rgba(0,0,0,.04);
+    }
+    .calc-label { font-size:15px; color:var(--ink); font-weight:600; margin-bottom:16px; display:block; }
+    .calc-input-row { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+    .calc-step-btn {
+      width:44px; height:44px; border-radius:50%; border:1.5px solid var(--ink-faint);
+      background:var(--bg); display:flex; align-items:center; justify-content:center;
+      color:var(--ink-mid); transition:all .2s; flex-shrink:0;
+    }
+    .calc-step-btn:hover { border-color:var(--scrub); color:var(--scrub); background:var(--scrub-light); }
+    .calc-card input[type="number"] {
+      width:100%; text-align:center; font-family:var(--ff-display); font-size:48px;
+      font-weight:800; color:var(--ink); border:none; background:transparent; outline:none;
+      -moz-appearance:textfield;
+    }
+    .calc-card input[type="number"]::-webkit-outer-spin-button,
+    .calc-card input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+
+    .calc-slider {
+      width:100%; height:6px; -webkit-appearance:none; appearance:none;
+      background:var(--ink-faint); border-radius:3px; outline:none; margin-bottom:8px;
+    }
+    .calc-slider::-webkit-slider-thumb {
+      -webkit-appearance:none; width:24px; height:24px; border-radius:50%;
+      background:var(--scrub); cursor:pointer; border:3px solid var(--white);
+      box-shadow:0 2px 8px rgba(13,148,136,.3);
+    }
+    .calc-slider::-moz-range-thumb {
+      width:24px; height:24px; border-radius:50%;
+      background:var(--scrub); cursor:pointer; border:3px solid var(--white);
+      box-shadow:0 2px 8px rgba(13,148,136,.3);
+    }
+    .calc-slider-labels {
+      display:flex; justify-content:space-between; font-size:11px; color:var(--ink-light); font-weight:500;
+    }
+
+    .calc-divider { height:1px; background:var(--ink-faint); margin:28px 0; }
+
+    .calc-breakdown { margin-bottom:24px; }
+    .calc-line { display:flex; justify-content:space-between; align-items:center; padding:6px 0; }
+    .calc-line-label { font-size:14px; color:var(--ink-mid); }
+    .calc-line-value { font-size:14px; color:var(--ink); font-weight:600; }
+    .calc-line-divider { height:1px; background:var(--ink-faint); margin:10px 0; }
+    .calc-line-total .calc-line-label { font-size:18px; color:var(--ink); font-weight:700; }
+    .calc-line-total .calc-line-value {
+      font-family:var(--ff-display); font-size:36px; font-weight:800; color:var(--scrub-deep);
+    }
+    .calc-note { font-size:13px; color:var(--ink-light); margin-bottom:20px; line-height:1.5; }
+    .calc-book-btn { width:100%; padding:15px; font-size:16px; border-radius:100px; }
+
+    .calc-context { display:flex; flex-direction:column; gap:12px; }
+    .calc-context-item {
+      display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-mid);
+    }
+
+    /* ===== REVIEWS (leave a review) ===== */
+    .no-reviews-msg {
+      font-size:15px; color:var(--ink-light); font-style:italic; margin-bottom:32px;
+    }
+    .review-form-card {
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:32px 28px; max-width:600px;
+    }
+    .review-form-card h4 { font-size:18px; color:var(--ink); font-weight:600; margin-bottom:16px; }
+    .review-star-input { display:flex; gap:6px; margin-bottom:20px; }
+    .star-btn {
+      font-size:28px; color:var(--ink-faint); cursor:pointer; transition:color .15s;
+      user-select:none; line-height:1;
+    }
+    .star-btn.active { color:var(--sun); }
+    .star-btn:hover { color:var(--sun-glow); }
+    .review-form-row { display:flex; gap:16px; }
+    .review-form-card textarea {
+      width:100%; padding:12px 16px; border-radius:10px;
+      border:1.5px solid var(--ink-faint); background:var(--bg);
+      color:var(--ink); font-size:14px; outline:none;
+      font-family:var(--ff-body); transition:border .2s; resize:vertical;
+    }
+    .review-form-card textarea::placeholder { color:var(--ink-light); }
+    .review-form-card textarea:focus { border-color:var(--scrub); background:var(--white); }
+    .review-success {
+      margin-top:12px; font-size:14px; color:var(--scrub); font-weight:500;
+    }
+
+    /* submitted review cards */
+    .review-card {
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:28px 24px;
+    }
+    .review-stars { color:var(--sun); font-size:16px; margin-bottom:14px; letter-spacing:2px; }
+    .review-card p { font-size:14px; color:var(--ink-mid); line-height:1.6; margin-bottom:18px; font-style:italic; }
+    .review-author { font-size:14px; color:var(--ink); font-weight:600; }
+    .review-area { font-size:12px; color:var(--ink-light); margin-top:2px; }
+
+    .reviews-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+
+    /* ===== FAQ ===== */
+    .faq-list { max-width:680px; }
+    .faq-item { border-bottom:1px solid var(--ink-faint); }
+    .faq-q {
+      padding:22px 0; display:flex; justify-content:space-between; align-items:center;
+      font-size:16px; color:var(--ink); font-weight:500; background:none;
+      border:none; width:100%; text-align:left; cursor:pointer; transition:color .2s;
+      font-family:var(--ff-body);
+    }
+    .faq-q:hover { color:var(--scrub); }
+    .faq-q .icon { color:var(--scrub); font-size:22px; transition:transform .3s; font-weight:300; }
+    .faq-q.open .icon { transform:rotate(45deg); }
+    .faq-a { padding:0 0 22px; font-size:14px; color:var(--ink-mid); line-height:1.65; display:none; }
+    .faq-a.open { display:block; }
+
+    /* ===== CTA BANNER ===== */
+    .cta-banner {
+      background:var(--ink); border-radius:var(--radius-lg); padding:72px 40px;
+      text-align:center; max-width:1100px; margin:0 auto 100px;
+      position:relative; overflow:hidden;
+    }
+    .cta-banner::before {
+      content:''; position:absolute; top:-50%; right:-20%; width:400px; height:400px;
+      background:var(--sun); border-radius:50%; opacity:.08; filter:blur(60px);
+    }
+    .cta-banner::after {
+      content:''; position:absolute; bottom:-30%; left:-10%; width:300px; height:300px;
+      background:var(--scrub); border-radius:50%; opacity:.1; filter:blur(60px);
+    }
+    .cta-banner h2 { font-family:var(--ff-display); font-size:clamp(26px,4vw,40px); color:var(--white); margin-bottom:14px; position:relative; z-index:1; }
+    .cta-banner p { color:rgba(255,255,255,.6); font-size:16px; max-width:440px; margin:0 auto 32px; position:relative; z-index:1; }
+    .btn-cta {
+      background:var(--sun); color:var(--ink); border:none; border-radius:100px;
+      padding:15px 40px; font-weight:700; font-size:16px; transition:all .3s;
+      position:relative; z-index:1;
+    }
+    .btn-cta:hover { background:var(--sun-glow); transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,158,11,.3); }
+
+    /* ===== BOOKING MODAL ===== */
+    .modal-overlay {
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(28,25,23,.55); backdrop-filter:blur(16px);
+      display:none; align-items:center; justify-content:center;
+      animation:fadeIn .25s ease;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal {
+      background:var(--white); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); max-width:500px; width:92%; padding:40px 36px;
+      box-shadow:0 32px 80px rgba(0,0,0,.15); position:relative;
+    }
+    .modal-close {
+      position:absolute; top:18px; right:18px; background:var(--bg-warm);
+      border:none; color:var(--ink-mid); font-size:18px; width:32px; height:32px;
+      border-radius:50%; display:flex; align-items:center; justify-content:center;
+      transition:background .2s;
+    }
+    .modal-close:hover { background:var(--ink-faint); }
+    .modal h3 { font-family:var(--ff-display); color:var(--ink); font-size:24px; margin:0 0 4px; font-weight:700; }
+    .modal .modal-sub { color:var(--ink-mid); font-size:14px; margin:0 0 28px; }
+    .modal .modal-sub .teal { color:var(--scrub); font-weight:600; }
+    .field { margin-bottom:18px; }
+    .field label {
+      display:block; color:var(--ink-mid); font-size:12px; font-weight:600;
+      margin-bottom:6px; letter-spacing:.06em; text-transform:uppercase;
+    }
+    .field input {
+      width:100%; padding:12px 16px; border-radius:10px;
+      border:1.5px solid var(--ink-faint); background:var(--bg);
+      color:var(--ink); font-size:15px; outline:none;
+      font-family:var(--ff-body); transition:border .2s;
+    }
+    .field input::placeholder { color:var(--ink-light); }
+    .field input:focus { border-color:var(--scrub); background:var(--white); }
+    .btn-continue {
+      width:100%; padding:15px; border-radius:100px; border:none;
+      background:var(--ink); color:var(--white); font-weight:700;
+      font-size:16px; margin-top:8px; transition:all .3s;
+    }
+    .btn-continue:disabled { background:var(--ink-faint); color:var(--ink-light); cursor:default; }
+    .btn-continue:not(:disabled):hover { background:var(--scrub-deep); box-shadow:0 6px 20px rgba(13,148,136,.2); }
+    .btn-back {
+      width:100%; padding:10px; border-radius:100px; border:none;
+      background:transparent; color:var(--ink-light); font-size:14px; margin-top:8px;
+    }
+    .btn-back:hover { color:var(--ink-mid); }
+    .order-summary {
+      background:var(--bg); border:1px solid var(--ink-faint);
+      border-radius:var(--radius); padding:22px; margin-bottom:24px;
+    }
+    .order-row { display:flex; justify-content:space-between; margin-bottom:10px; }
+    .order-row .label { color:var(--ink-light); font-size:14px; }
+    .order-row .value { color:var(--ink); font-size:14px; font-weight:600; text-align:right; max-width:60%; }
+    .order-divider { height:1px; background:var(--ink-faint); margin:14px 0; }
+    .order-total .label { color:var(--ink); font-size:16px; font-weight:700; }
+    .order-total .value { color:var(--scrub-deep); font-family:var(--ff-display); font-size:24px; font-weight:800; }
+    .spinner {
+      width:24px; height:24px; border:3px solid var(--ink-faint);
+      border-top-color:var(--scrub); border-radius:50%; animation:spin .7s linear infinite;
+      display:inline-block;
+    }
+    @keyframes spin { to { transform:rotate(360deg) } }
+
+    /* ===== SUCCESS BANNER ===== */
+    #successBanner {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      background:var(--scrub-light); border-bottom:1px solid var(--scrub);
+      padding:16px 24px; text-align:center; animation:fadeIn .5s ease; display:none;
+    }
+    #successBanner p { color:var(--scrub-deep); font-size:15px; font-weight:600; margin:0; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top:1px solid var(--ink-faint); padding:48px 24px;
+      text-align:center; color:var(--ink-light); font-size:13px;
+    }
+    .footer-brand { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; }
+    .footer-brand span { font-family:var(--ff-display); font-size:20px; color:var(--ink); font-weight:700; }
+    .footer a { color:var(--scrub); font-weight:500; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:768px) {
+      .nav-links { display:none; }
+      .truth-grid { grid-template-columns:1fr; }
+      .cta-banner { margin-left:24px; margin-right:24px; padding:52px 24px; }
+      .calc-card { padding:32px 24px; }
+      .calc-card input[type="number"] { font-size:36px; }
+      .review-form-row { flex-direction:column; gap:0; }
+      .review-form-row .field { margin-bottom:16px; }
+      .modal { padding:32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="navbar">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+      </div>
+      Sun<span class="logo-sun">Scrub</span>
+    </a>
+    <div class="nav-links">
+      <a href="#problem">The Problem</a>
+      <a href="#why">Why Clean</a>
+      <a href="#how-often">How Often</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <button class="btn-primary" onclick="scrollTo('#pricing')">Book Now</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+    <div class="hero-content">
+      <div class="hero-pill"><span class="hero-pill-dot"></span> Serving Dublin &amp; surrounding counties</div>
+      <h1>Give your panels a proper <span class="highlight">scrub</span></h1>
+      <p>Dublin rain doesn't clean your panels — it makes them worse. Bird muck, salt, lichen, and grime are silently draining up to a quarter of your solar output.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollTo('#pricing')">Book a Clean — from €46</button>
+        <a href="#problem" class="btn-outline">See the facts ↓</a>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- THE DIRTY TRUTH -->
+  <div class="divider"></div>
+  <section class="section reveal" id="problem">
+    <div class="section-eyebrow">The Dirty Truth</div>
+    <h2 class="section-title">Rain doesn't clean your panels</h2>
+    <p class="section-sub">Most homeowners assume rain does the job. It doesn't. Here's what's actually sitting on your roof right now.</p>
+    <div class="truth-grid">
+      <ul class="truth-list">
+        <li>
+          <div class="truth-icon bad">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="9" r="1" fill="#EF4444"/><circle cx="15" cy="9" r="1" fill="#EF4444"/></svg>
+          </div>
+          <div>
+            <h4>Bird Droppings</h4>
+            <p>Acidic and opaque. A single bird dropping can block an entire cell, reducing a panel's output by up to 50%. They bake on in summer and don't wash off in rain.</p>
+          </div>
+        </li>
+        <li>
+          <div class="truth-icon bad">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round"><path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/></svg>
+          </div>
+          <div>
+            <h4>Coastal Salt Film</h4>
+            <p>Dublin is a coastal city. Sea salt deposits build an invisible haze across your panels that worsens with every breeze. This alone cuts efficiency by 5–10%.</p>
+          </div>
+        </li>
+        <li>
+          <div class="truth-icon bad">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round"><path d="M7 20h10"/><path d="M10 20c0-4.4-3-8-3-12a5 5 0 0110 0c0 4-3 7.6-3 12"/><path d="M9.5 9.4c1.2-.8 3.4-.8 5 0"/></svg>
+          </div>
+          <div>
+            <h4>Lichen &amp; Algae</h4>
+            <p>In Ireland's damp climate, lichen takes root on panel edges and frames. Left unchecked it creeps across the glass and causes permanent micro-scratching.</p>
+          </div>
+        </li>
+        <li>
+          <div class="truth-icon bad">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>
+          </div>
+          <div>
+            <h4>Dublin Pollen</h4>
+            <p>Dublin's pollen season runs from February through September. Grass pollen peaks in June and July across the Liffey valley and southside suburbs. Tree pollen from birch, oak, ash, and plane trees hits hard from March to May — particularly around Phoenix Park, Trinity, and the tree-lined roads of Rathgar, Ranelagh, and Dartry. Rapeseed pollen drifts in from surrounding farmland in Meath and Kildare. Each wave leaves a fine yellow-green film that rain bakes into a sticky residue, compounding with every cycle.</p>
+          </div>
+        </li>
+      </ul>
+      <div class="truth-visual">
+        <div class="truth-visual-big"><span>–</span>25%</div>
+        <p>Average energy loss from panels that haven't been cleaned in 6 months in the Dublin area</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CLEAN -->
+  <div class="divider"></div>
+  <section class="section reveal" id="why">
+    <div class="section-eyebrow">Why Clean Your Panels</div>
+    <h2 class="section-title">The payoff is immediate</h2>
+    <p class="section-sub">A single professional clean typically pays for itself within 2–4 months through recovered energy output.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon fi-bolt">
+          <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><polygon points="23,4 11,22 19,22 17,36 29,18 21,18" fill="#F59E0B" opacity=".3" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h4>Recover Up to 25% Output</h4>
+        <p>Studies consistently show 15–25% energy recovery after a professional clean. On a typical 4kW Dublin system, that's €200 or more back per year in avoided electricity costs.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-clock">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#3B82F6" stroke-width="2" fill="none"/><path d="M14 7v7l4 4" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </div>
+        <h4>Extend Panel Lifespan</h4>
+        <p>Dirt and lichen cause micro-abrasions that degrade the anti-reflective coating. Regular cleaning keeps your panels performing for their full 25–30 year warranty.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-shield">
+          <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><path d="M20 4L6 10V19C6 28.5 12 34.5 20 37C28 34.5 34 28.5 34 19V10L20 4Z" fill="#0D9488" opacity=".12" stroke="#0D9488" stroke-width="2"/><polyline points="14,20 18,24 26,16" stroke="#0D9488" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h4>Protect Your Warranty</h4>
+        <p>Many panel manufacturers require regular maintenance to honour their warranty. A professional clean is the easiest way to stay covered.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-leaf">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 24C4 24 6 8 20 4C20 4 22 18 8 22" stroke="#0D9488" stroke-width="2" fill="#0D9488" opacity=".12" stroke-linecap="round"/><path d="M4 24C10 18 14 14 20 4" stroke="#0D9488" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </div>
+        <h4>100% Eco-Friendly</h4>
+        <p>We use only purified deionised water — zero chemicals, zero runoff. Better for your roof, your garden, and Dublin Bay.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-water">
+          <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><path d="M20 6C20 6 9 18 9 25C9 31.075 14.025 36 20 36C25.975 36 31 31.075 31 25C31 18 20 6 20 6Z" fill="#0D9488" opacity=".2" stroke="#0D9488" stroke-width="2"/></svg>
+        </div>
+        <h4>No Residue Left Behind</h4>
+        <p>Tap water leaves mineral deposits that attract more dirt. Our deionised water evaporates clean, so panels stay cleaner for longer after we've been.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-camera">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="7" width="24" height="16" rx="3" stroke="#D97706" stroke-width="2" fill="none"/><circle cx="14" cy="15" r="4" stroke="#D97706" stroke-width="2" fill="#F59E0B" opacity=".2"/><path d="M9 7V5a2 2 0 012-2h6a2 2 0 012 2v2" stroke="#D97706" stroke-width="2"/></svg>
+        </div>
+        <h4>Before &amp; After Proof</h4>
+        <p>Every job photographed and sent to you same-day. You'll see exactly what we removed and the difference it makes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW OFTEN -->
+  <div class="divider"></div>
+  <section class="section reveal" id="how-often">
+    <div class="section-eyebrow">How Often</div>
+    <h2 class="section-title">How often should you clean your panels?</h2>
+    <p class="section-sub">Short answer: every six months. Here's why, depending on where you are in Dublin.</p>
+    <div class="frequency-cards">
+      <div class="freq-card">
+        <span class="freq-badge residential">Suburban Dublin</span>
+        <h4>Every 6 months</h4>
+        <p>Even in a typical suburban estate, six months is enough for pollen, dust, and bird droppings to cost you serious output. A spring and autumn clean keeps you at peak year-round.</p>
+      </div>
+      <div class="freq-card">
+        <span class="freq-badge coastal">Coastal / Near Trees</span>
+        <h4>Every 6 months (minimum)</h4>
+        <p>If you're near the coast (Howth, Dún Laoghaire, Malahide) or under trees, salt and organic debris build up fast. Every six months is essential — some customers book quarterly.</p>
+      </div>
+      <div class="freq-card">
+        <span class="freq-badge farm">Farm / Rural</span>
+        <h4>Every 6 months</h4>
+        <p>Agricultural dust, rapeseed pollen, and heavy bird activity mean rural and farm panels get filthy fast. Biannual cleaning protects your investment and maximises SEAI grant returns.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING CALCULATOR -->
+  <div class="divider"></div>
+  <section class="section reveal" id="pricing">
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-title">See your exact price</h2>
+    <p class="section-sub">€39 callout + €7 per panel. No hidden fees, no brackets — just honest maths. Type in your panel count below.</p>
+
+    <div class="calc-wrapper">
+      <div class="calc-card">
+        <div class="calc-input-area">
+          <label class="calc-label" for="panelCount">How many panels do you have?</label>
+          <div class="calc-input-row">
+            <button class="calc-step-btn" onclick="adjustPanels(-1)" aria-label="Decrease">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="5" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <input type="number" id="panelCount" min="1" max="200" value="10" oninput="updateCalc()" />
+            <button class="calc-step-btn" onclick="adjustPanels(1)" aria-label="Increase">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="5" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="5" x2="10" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <input type="range" id="panelSlider" min="1" max="80" value="10" oninput="syncSlider()" class="calc-slider" />
+          <div class="calc-slider-labels">
+            <span>1</span>
+            <span>20</span>
+            <span>40</span>
+            <span>60</span>
+            <span>80+</span>
+          </div>
+        </div>
+
+        <div class="calc-divider"></div>
+
+        <div class="calc-result-area">
+          <div class="calc-breakdown">
+            <div class="calc-line">
+              <span class="calc-line-label">Callout fee</span>
+              <span class="calc-line-value">€39</span>
+            </div>
+            <div class="calc-line">
+              <span class="calc-line-label"><span id="calcPanelCount">10</span> panels × €7</span>
+              <span class="calc-line-value" id="calcPanelCost">€70</span>
+            </div>
+            <div class="calc-line-divider"></div>
+            <div class="calc-line calc-line-total">
+              <span class="calc-line-label">Your price</span>
+              <span class="calc-line-value" id="calcTotal">€109</span>
+            </div>
+          </div>
+          <p class="calc-note">One-off payment. No subscriptions. No card details until you're ready.</p>
+          <button class="btn-primary calc-book-btn" onclick="handleBookNow()">Book Now</button>
+        </div>
+      </div>
+
+      <div class="calc-context">
+        <div class="calc-context-item">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polyline points="4,10 8,14 16,6" stroke="var(--scrub)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Same price whether it's a bungalow or a three-storey</span>
+        </div>
+        <div class="calc-context-item">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polyline points="4,10 8,14 16,6" stroke="var(--scrub)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>No extra charge for hard-to-reach panels</span>
+        </div>
+        <div class="calc-context-item">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polyline points="4,10 8,14 16,6" stroke="var(--scrub)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Over 80 panels? Get in touch for a custom quote</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <div class="divider"></div>
+  <section class="section reveal" id="reviews">
+    <div class="section-eyebrow">Reviews</div>
+    <h2 class="section-title">What our customers say</h2>
+    <p class="section-sub">Had a SunScrub clean? We'd love to hear how it went.</p>
+
+    <div id="reviewsContainer" class="reviews-grid" style="margin-bottom:48px;">
+      <!-- Reviews will appear here -->
+    </div>
+    <p id="noReviewsMsg" class="no-reviews-msg">No reviews yet — be the first to share your experience.</p>
+
+    <div class="review-form-card">
+      <h4>Leave a review</h4>
+      <div class="review-star-input" id="starInput">
+        <span class="star-btn" data-star="1">★</span>
+        <span class="star-btn" data-star="2">★</span>
+        <span class="star-btn" data-star="3">★</span>
+        <span class="star-btn" data-star="4">★</span>
+        <span class="star-btn" data-star="5">★</span>
+      </div>
+      <div class="review-form-row">
+        <div class="field" style="flex:1;margin-bottom:0;">
+          <label for="reviewName">Your Name</label>
+          <input type="text" id="reviewName" placeholder="Aoife M." />
+        </div>
+        <div class="field" style="flex:1;margin-bottom:0;">
+          <label for="reviewArea">Area</label>
+          <input type="text" id="reviewArea" placeholder="Blackrock" />
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px;">
+        <label for="reviewText">Your Review</label>
+        <textarea id="reviewText" rows="3" placeholder="How was your experience with SunScrub?"></textarea>
+      </div>
+      <button class="btn-primary" style="margin-top:12px;width:100%;" onclick="submitReview()">Submit Review</button>
+      <p id="reviewSuccess" class="review-success" style="display:none;">Thanks for your review — it's now visible above.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <div class="divider"></div>
+  <section class="section reveal" id="faq">
+    <div class="section-eyebrow">FAQ</div>
+    <h2 class="section-title">Common questions</h2>
+    <div class="faq-list" style="margin-top:36px;">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How often should I clean my solar panels? <span class="icon">+</span></button>
+        <div class="faq-a">Every six months. Dublin's combination of coastal salt air, heavy bird activity, and a pollen season that runs February through September means grime builds up fast. Waiting a full year can cost you 25% of your output. A spring and autumn clean is the sweet spot.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How much energy am I actually losing? <span class="icon">+</span></button>
+        <div class="faq-a">Research from multiple universities puts the figure at 15–25% for panels that haven't been cleaned in 6 months. In Dublin specifically, coastal salt, pollen cycles, and bird activity push this toward the higher end. On a typical 4kW system, that's over €200 per year you're handing back to the grid.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Doesn't rain clean the panels? <span class="icon">+</span></button>
+        <div class="faq-a">This is the biggest myth in solar. Rain removes loose dust but actually makes things worse — it carries pollen, pollution particles, and minerals that leave a sticky residue as the water evaporates. Bird droppings, lichen, and salt film don't budge in rain.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Do you use chemicals? <span class="icon">+</span></button>
+        <div class="faq-a">Never. We use 100% purified deionised water and soft-bristle brushes. Chemical cleaners can damage the anti-reflective coating on your panels and void your warranty. Our method is approved by all major panel manufacturers.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Will cleaning void my panel warranty? <span class="icon">+</span></button>
+        <div class="faq-a">The opposite — most manufacturers require regular cleaning as part of their warranty terms. Our deionised water method is recommended by all major brands including SunPower, LG, and Jinko.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How long does a clean take? <span class="icon">+</span></button>
+        <div class="faq-a">30–60 minutes for a typical residential job. We confirm a 2-hour arrival window the day before so you're not waiting around all day.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div style="padding:0 24px;">
+    <div class="cta-banner reveal">
+      <h2>Ready for a proper scrub?</h2>
+      <p>Book today and your panels will be back to peak performance within the week.</p>
+      <button class="btn-cta" onclick="handleBookNow()">Book Your Clean Now</button>
+    </div>
+  </div>
+
+  <!-- BOOKING MODAL -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+
+      <!-- STEP 1: Customer Details -->
+      <div id="modalStep1">
+        <h3>Book Your Scrub</h3>
+        <p class="modal-sub"><span id="modalPanelInfo"></span> — <span class="teal" id="modalPriceInfo"></span></p>
+        <div class="field"><label>Full Name</label><input type="text" id="bkName" placeholder="Aoife Murphy" /></div>
+        <div class="field"><label>Email</label><input type="email" id="bkEmail" placeholder="aoife@example.ie" /></div>
+        <div class="field"><label>Phone</label><input type="tel" id="bkPhone" placeholder="085 123 4567" /></div>
+        <div class="field"><label>Property Address</label><input type="text" id="bkAddress" placeholder="12 Seaview Road, Blackrock" /></div>
+        <div class="field"><label>Eircode (optional)</label><input type="text" id="bkEircode" placeholder="A94 X2R7" /></div>
+        <button class="btn-continue" id="btnModalContinue" disabled onclick="goToConfirm()">Continue to Payment</button>
+      </div>
+
+      <!-- STEP 2: Confirm -->
+      <div id="modalStep2" style="display:none;">
+        <h3>Confirm &amp; Pay</h3>
+        <div class="order-summary">
+          <div class="order-row"><span class="label">Service</span><span class="value" id="confirmService"></span></div>
+          <div class="order-row"><span class="label">Address</span><span class="value" id="confirmAddress"></span></div>
+          <div class="order-row"><span class="label">Email</span><span class="value" id="confirmEmail"></span></div>
+          <div class="order-divider"></div>
+          <div class="order-row"><span class="label">Callout fee</span><span class="value">€39</span></div>
+          <div class="order-row"><span class="label" id="confirmPanelLine"></span><span class="value" id="confirmPanelCost"></span></div>
+          <div class="order-divider"></div>
+          <div class="order-row order-total"><span class="label">Total</span><span class="value" id="confirmTotal"></span></div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;line-height:1.55;">
+          You'll be redirected to <strong style="color:var(--ink)">Stripe's secure checkout</strong> to complete payment. We never see your card details.
+        </p>
+        <button class="btn-continue" id="btnModalPay" onclick="handleStripeCheckout()">
+          Pay <span id="confirmPayAmount"></span> via Stripe
+        </button>
+        <button class="btn-back" onclick="backToDetails()">Back to details</button>
+      </div>
+
+      <!-- STEP 3: Processing -->
+      <div id="modalStep3" style="display:none;text-align:center;padding:48px 0;">
+        <div class="spinner" style="width:44px;height:44px;margin:0 auto 20px;border-width:4px;"></div>
+        <h3 style="font-family:var(--ff-display);color:var(--ink);font-size:20px;margin-bottom:8px;">Creating your booking...</h3>
+        <p style="color:var(--ink-mid);font-size:14px;">You'll be redirected to Stripe in a moment.</p>
+      </div>
+
+      <!-- STEP 4: Error -->
+      <div id="modalStep4" style="display:none;text-align:center;padding:48px 0;">
+        <div style="width:64px;height:64px;border-radius:50%;margin:0 auto 20px;background:var(--red-soft);display:flex;align-items:center;justify-content:center;">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><line x1="8" y1="8" x2="20" y2="20" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/><line x1="20" y1="8" x2="8" y2="20" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <h3 style="font-family:var(--ff-display);color:var(--red);font-size:20px;margin-bottom:8px;">Something went wrong</h3>
+        <p id="modalErrorMsg" style="color:var(--ink-mid);font-size:14px;margin-bottom:24px;"></p>
+        <button class="btn-outline" onclick="backToDetails()">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS BANNER -->
+  <div id="successBanner">
+    <p>Payment successful — your booking is confirmed. We'll email you with scheduling details.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <div class="logo-icon" style="width:28px;height:28px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" width="16" height="16">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+      </div>
+      <span>Sun<span style="color:var(--sun)">Scrub</span></span>
+    </div>
+    <p>Dublin-based solar panel cleaning · Fully insured · Eco-friendly</p>
+    <p style="margin-top:8px"><a href="tel:+353851234567">085 123 4567</a> · <a href="mailto:hello@sunscrub.ie">hello@sunscrub.ie</a></p>
+    <p style="margin-top:16px;font-size:11px;color:var(--ink-light)">&copy; 2026 SunScrub. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ===== NAV =====
+    window.addEventListener("scroll", function() {
+      document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 50);
+    });
+
+    // ===== SCROLL REVEAL =====
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("visible"); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".reveal").forEach(function(el) { obs.observe(el); });
+
+    function scrollTo(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // ===== FAQ =====
+    function toggleFaq(btn) {
+      var a = btn.nextElementSibling;
+      var wasOpen = btn.classList.contains("open");
+      document.querySelectorAll(".faq-q").forEach(function(q) { q.classList.remove("open"); });
+      document.querySelectorAll(".faq-a").forEach(function(a) { a.classList.remove("open"); });
+      if (!wasOpen) { btn.classList.add("open"); a.classList.add("open"); }
+    }
+
+    // ===== PRICING CALCULATOR =====
+    var CALLOUT = 39;
+    var PER_PANEL = 7;
+
+    function getTotal(panels) { return CALLOUT + (panels * PER_PANEL); }
+
+    function updateCalc() {
+      var input = document.getElementById("panelCount");
+      var count = parseInt(input.value) || 1;
+      if (count < 1) count = 1;
+      if (count > 200) count = 200;
+      input.value = count;
+      document.getElementById("panelSlider").value = Math.min(count, 80);
+      document.getElementById("calcPanelCount").textContent = count;
+      document.getElementById("calcPanelCost").textContent = "\u20AC" + (count * PER_PANEL);
+      document.getElementById("calcTotal").textContent = "\u20AC" + getTotal(count);
+    }
+
+    function syncSlider() {
+      document.getElementById("panelCount").value = document.getElementById("panelSlider").value;
+      updateCalc();
+    }
+
+    function adjustPanels(delta) {
+      var input = document.getElementById("panelCount");
+      var count = Math.max(1, Math.min(200, (parseInt(input.value) || 1) + delta));
+      input.value = count;
+      updateCalc();
+    }
+
+    updateCalc();
+
+    // ===== BOOKING MODAL =====
+    var bookingPanels = 10;
+
+    function handleBookNow() {
+      bookingPanels = parseInt(document.getElementById("panelCount").value) || 10;
+      var total = getTotal(bookingPanels);
+      document.getElementById("modalPanelInfo").textContent = bookingPanels + " panel" + (bookingPanels !== 1 ? "s" : "");
+      document.getElementById("modalPriceInfo").textContent = "\u20AC" + total;
+      showModalStep(1);
+      document.getElementById("bookingModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      document.getElementById("bookingModal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("bookingModal").addEventListener("click", function(e) {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    ["bkName","bkEmail","bkPhone","bkAddress"].forEach(function(id) {
+      document.getElementById(id).addEventListener("input", validateBookingForm);
+    });
+
+    function validateBookingForm() {
+      var ok = ["bkName","bkEmail","bkPhone","bkAddress"].every(function(id) {
+        return document.getElementById(id).value.trim();
+      });
+      document.getElementById("btnModalContinue").disabled = !ok;
+    }
+
+    function showModalStep(n) {
+      [1,2,3,4].forEach(function(i) {
+        document.getElementById("modalStep" + i).style.display = i === n ? "block" : "none";
+      });
+    }
+
+    function goToConfirm() {
+      var panels = bookingPanels;
+      var total = getTotal(panels);
+      document.getElementById("confirmService").textContent = panels + " panel clean";
+      document.getElementById("confirmAddress").textContent = document.getElementById("bkAddress").value;
+      document.getElementById("confirmEmail").textContent = document.getElementById("bkEmail").value;
+      document.getElementById("confirmPanelLine").textContent = panels + " panels \u00D7 \u20AC7";
+      document.getElementById("confirmPanelCost").textContent = "\u20AC" + (panels * PER_PANEL);
+      document.getElementById("confirmTotal").textContent = "\u20AC" + total;
+      document.getElementById("confirmPayAmount").textContent = "\u20AC" + total;
+      showModalStep(2);
+    }
+
+    function backToDetails() { showModalStep(1); }
+
+    // ===== STRIPE CHECKOUT =====
+    function handleStripeCheckout() {
+      showModalStep(3);
+
+      var payload = {
+        name:       document.getElementById("bkName").value.trim(),
+        email:      document.getElementById("bkEmail").value.trim(),
+        phone:      document.getElementById("bkPhone").value.trim(),
+        address:    document.getElementById("bkAddress").value.trim(),
+        eircode:    document.getElementById("bkEircode").value.trim(),
+        panelCount: bookingPanels,
+      };
+
+      fetch("/.netlify/functions/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      .then(function(res) {
+        if (!res.ok) return res.json().then(function(err) { throw new Error(err.error || "Server error"); });
+        return res.json();
+      })
+      .then(function(data) {
+        window.location.href = data.checkout_url;
+      })
+      .catch(function(err) {
+        console.error("Checkout failed:", err);
+        document.getElementById("modalErrorMsg").textContent = err.message || "Please try again.";
+        showModalStep(4);
+      });
+    }
+
+    // ===== REVIEWS =====
+    var selectedStars = 0;
+
+    document.querySelectorAll(".star-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        selectedStars = parseInt(btn.dataset.star);
+        document.querySelectorAll(".star-btn").forEach(function(s, i) {
+          s.classList.toggle("active", i < selectedStars);
+        });
+      });
+      btn.addEventListener("mouseenter", function() {
+        var hover = parseInt(btn.dataset.star);
+        document.querySelectorAll(".star-btn").forEach(function(s, i) {
+          s.style.color = i < hover ? "var(--sun-glow)" : "";
+        });
+      });
+      btn.addEventListener("mouseleave", function() {
+        document.querySelectorAll(".star-btn").forEach(function(s) {
+          s.style.color = "";
+        });
+      });
+    });
+
+    function loadReviews() {
+      fetch("/.netlify/functions/reviews")
+        .then(function(res) { return res.ok ? res.json() : []; })
+        .then(function(reviews) { renderReviews(reviews); })
+        .catch(function() { /* show empty state */ });
+    }
+
+    function renderReviews(reviews) {
+      var container = document.getElementById("reviewsContainer");
+      var noMsg = document.getElementById("noReviewsMsg");
+
+      if (!reviews || reviews.length === 0) {
+        container.innerHTML = "";
+        noMsg.style.display = "block";
+        return;
+      }
+
+      noMsg.style.display = "none";
+      container.innerHTML = reviews.map(function(r) {
+        var stars = "\u2605".repeat(r.stars) + "\u2606".repeat(5 - r.stars);
+        var escaped = r.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        var name = r.name.replace(/</g, "&lt;");
+        var area = (r.area || "").replace(/</g, "&lt;");
+        return '<div class="review-card">' +
+          '<div class="review-stars">' + stars + '</div>' +
+          '<p>\u201C' + escaped + '\u201D</p>' +
+          '<div class="review-author">' + name + '</div>' +
+          (area ? '<div class="review-area">' + area + '</div>' : '') +
+          '</div>';
+      }).join("");
+    }
+
+    function submitReview() {
+      var name = document.getElementById("reviewName").value.trim();
+      var area = document.getElementById("reviewArea").value.trim();
+      var text = document.getElementById("reviewText").value.trim();
+
+      if (!name || !text || selectedStars === 0) {
+        alert("Please fill in your name, write a review, and select a star rating.");
+        return;
+      }
+
+      fetch("/.netlify/functions/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name, area: area, text: text, stars: selectedStars }),
+      })
+      .then(function(res) {
+        if (res.ok) {
+          document.getElementById("reviewName").value = "";
+          document.getElementById("reviewArea").value = "";
+          document.getElementById("reviewText").value = "";
+          selectedStars = 0;
+          document.querySelectorAll(".star-btn").forEach(function(s) { s.classList.remove("active"); });
+          var msg = document.getElementById("reviewSuccess");
+          msg.style.display = "block";
+          setTimeout(function() { msg.style.display = "none"; }, 4000);
+          loadReviews();
+        }
+      })
+      .catch(function() { alert("Failed to submit review. Please try again."); });
+    }
+
+    loadReviews();
+
+    // ===== CHECK RETURN FROM STRIPE =====
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get("success") === "true") {
+        document.getElementById("successBanner").style.display = "block";
+        window.history.replaceState({}, "", window.location.pathname);
+        setTimeout(function() { document.getElementById("successBanner").style.display = "none"; }, 10000);
+      }
+    })();
+  </script>
+
+</body>
+</html>

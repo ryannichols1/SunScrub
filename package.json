@@ -1,0 +1,9 @@
+{
+  "name": "sunscrub",
+  "version": "1.0.0",
+  "description": "SunScrub — Solar panel cleaning Dublin",
+  "dependencies": {
+    "stripe": "^17.0.0",
+    "@netlify/blobs": "^8.0.0"
+  }
+}
