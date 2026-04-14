@@ -51,7 +51,7 @@ exports.handler = async (event) => {
         name,
         email,
         phone,
-        metadata: { address, eircode: eircode || "", panel_count: String(panels), source: "sunscrub.ie" },
+        metadata: { address, eircode: eircode || "", panel_count: String(panels), source: "solarscrub.ie" },
       });
     }
 
@@ -68,7 +68,7 @@ exports.handler = async (event) => {
             currency: "eur",
             unit_amount: calloutCents,
             product_data: {
-              name: "SunScrub — Callout Fee",
+              name: "SolarScrub — Callout Fee",
               description: "One-time callout fee for solar panel cleaning in the Dublin area",
             },
           },
@@ -79,7 +79,7 @@ exports.handler = async (event) => {
             currency: "eur",
             unit_amount: perPanelCents,
             product_data: {
-              name: "SunScrub — Per Panel Clean",
+              name: "SolarScrub — Per Panel Clean",
               description: `Professional cleaning per solar panel using deionised water`,
             },
           },
