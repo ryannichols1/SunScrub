@@ -349,6 +349,7 @@
       background:var(--white); border:1px solid var(--ink-faint);
       border-radius:var(--radius-lg); max-width:500px; width:92%; padding:40px 36px;
       box-shadow:0 32px 80px rgba(0,0,0,.15); position:relative;
+      max-height:90vh; overflow-y:auto;
     }
     .modal-close {
       position:absolute; top:18px; right:18px; background:var(--bg-warm);
@@ -401,6 +402,54 @@
       display:inline-block;
     }
     @keyframes spin { to { transform:rotate(360deg) } }
+
+    /* ===== BOOKING CALENDAR ===== */
+    .cal-card {
+      border:1.5px solid var(--ink-faint); border-radius:10px;
+      background:var(--bg); overflow:hidden;
+    }
+    .cal-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 14px; border-bottom:1px solid var(--ink-faint);
+    }
+    .cal-month-label {
+      font-family:var(--ff-display); font-size:15px; font-weight:700; color:var(--ink);
+    }
+    .cal-nav-btn {
+      width:32px; height:32px; border:none; background:transparent; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--ink-mid); transition:all .15s; flex-shrink:0;
+    }
+    .cal-nav-btn:hover:not(:disabled) { background:var(--scrub-light); color:var(--scrub); }
+    .cal-nav-btn:disabled { color:var(--ink-faint); cursor:default; }
+    .cal-grid { padding:8px 10px 10px; }
+    .cal-day-headers {
+      display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:2px;
+    }
+    .cal-day-header {
+      text-align:center; font-size:10px; font-weight:700; color:var(--ink-light);
+      letter-spacing:.06em; padding:4px 0; text-transform:uppercase;
+    }
+    .cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+    .cal-day {
+      min-height:44px; display:flex; align-items:center; justify-content:center;
+      border-radius:8px; font-size:13px; font-weight:500; color:var(--ink);
+      cursor:pointer; border:none; background:transparent;
+      transition:all .15s; position:relative; font-family:var(--ff-body);
+      width:100%;
+    }
+    .cal-day:hover:not(.cal-disabled) { background:var(--scrub-light); color:var(--scrub-deep); }
+    .cal-day.cal-disabled { color:var(--ink-faint); cursor:default; pointer-events:none; }
+    .cal-day.cal-empty { cursor:default; pointer-events:none; }
+    .cal-day.cal-today::after {
+      content:''; position:absolute; bottom:5px; left:50%; transform:translateX(-50%);
+      width:4px; height:4px; border-radius:50%; background:var(--scrub);
+    }
+    .cal-day.cal-disabled.cal-today::after { background:var(--ink-faint); }
+    .cal-day.cal-selected {
+      background:var(--scrub); color:var(--white) !important; font-weight:700;
+    }
+    .cal-day.cal-selected::after { display:none; }
 
     /* ===== MODAL PANEL COUNT ===== */
     .modal-panel-row { display:flex; align-items:center; gap:12px; }
@@ -793,6 +842,32 @@
             </button>
           </div>
         </div>
+        <div class="field">
+          <label>Preferred Cleaning Date</label>
+          <div class="cal-card">
+            <div class="cal-header">
+              <button class="cal-nav-btn" type="button" id="calPrev" onclick="calNavigate(-1)" aria-label="Previous month">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <span class="cal-month-label" id="calMonthLabel"></span>
+              <button class="cal-nav-btn" type="button" id="calNext" onclick="calNavigate(1)" aria-label="Next month">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-day-headers">
+                <div class="cal-day-header">Mo</div>
+                <div class="cal-day-header">Tu</div>
+                <div class="cal-day-header">We</div>
+                <div class="cal-day-header">Th</div>
+                <div class="cal-day-header">Fr</div>
+                <div class="cal-day-header">Sa</div>
+                <div class="cal-day-header">Su</div>
+              </div>
+              <div class="cal-days" id="calDays"></div>
+            </div>
+          </div>
+        </div>
         <button class="btn-continue" id="btnModalContinue" disabled onclick="goToConfirm()">Continue to Payment</button>
       </div>
 
@@ -802,6 +877,7 @@
         <div class="order-summary">
           <div class="order-row"><span class="label">Service</span><span class="value" id="confirmService"></span></div>
           <div class="order-row"><span class="label">Address</span><span class="value" id="confirmAddress"></span></div>
+          <div class="order-row"><span class="label">Preferred date</span><span class="value" id="confirmDate"></span></div>
           <div class="order-row"><span class="label">Email</span><span class="value" id="confirmEmail"></span></div>
           <div class="order-divider"></div>
           <div class="order-row"><span class="label">Callout fee</span><span class="value">€39</span></div>
@@ -915,6 +991,95 @@
 
     updateCalc();
 
+    // ===== BOOKING CALENDAR =====
+    var CAL_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var CAL_DAYS_SHORT = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    var calYear, calMonth, selectedDate = null;
+
+    function calPad(n) { return n < 10 ? "0" + n : String(n); }
+
+    function calGetToday() {
+      var d = new Date(); d.setHours(0,0,0,0); return d;
+    }
+
+    function calGetMinDate() {
+      var d = calGetToday(); d.setDate(d.getDate() + 3); return d;
+    }
+
+    function calInit() {
+      var today = calGetToday();
+      calYear  = today.getFullYear();
+      calMonth = today.getMonth();
+      selectedDate = null;
+      renderCal();
+    }
+
+    function calNavigate(delta) {
+      calMonth += delta;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      if (calMonth < 0)  { calMonth = 11; calYear--; }
+      renderCal();
+    }
+
+    function renderCal() {
+      var today   = calGetToday();
+      var minDate = calGetMinDate();
+
+      document.getElementById("calMonthLabel").textContent = CAL_MONTHS[calMonth] + " " + calYear;
+
+      // Disable prev arrow when already on the earliest visible month
+      var prevBtn = document.getElementById("calPrev");
+      prevBtn.disabled = (calYear === today.getFullYear() && calMonth === today.getMonth());
+
+      var firstDayOfWeek = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+      var startOffset    = (firstDayOfWeek === 0) ? 6 : firstDayOfWeek - 1; // Monday-first
+      var daysInMonth    = new Date(calYear, calMonth + 1, 0).getDate();
+
+      var html = "";
+      for (var i = 0; i < startOffset; i++) {
+        html += '<div class="cal-day cal-empty" aria-hidden="true"></div>';
+      }
+
+      for (var d = 1; d <= daysInMonth; d++) {
+        var date = new Date(calYear, calMonth, d);
+        date.setHours(0,0,0,0);
+
+        var isDisabled = date < minDate;
+        var isToday    = date.getTime() === today.getTime();
+        var isSelected = selectedDate && date.getTime() === selectedDate.getTime();
+        var dateISO    = calYear + "-" + calPad(calMonth + 1) + "-" + calPad(d);
+
+        var cls = "cal-day";
+        if (isDisabled) cls += " cal-disabled";
+        if (isToday)    cls += " cal-today";
+        if (isSelected) cls += " cal-selected";
+
+        if (isDisabled) {
+          html += '<div class="' + cls + '" aria-label="' + dateISO + '" aria-disabled="true">' + d + '</div>';
+        } else {
+          html += '<button type="button" class="' + cls + '" onclick="calSelectDate(\'' + dateISO + '\')" aria-label="' + dateISO + '">' + d + '</button>';
+        }
+      }
+
+      document.getElementById("calDays").innerHTML = html;
+    }
+
+    function calSelectDate(dateISO) {
+      var parts = dateISO.split("-");
+      selectedDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      selectedDate.setHours(0,0,0,0);
+      renderCal();
+      validateBookingForm();
+    }
+
+    function calFormatNice(date) {
+      return CAL_DAYS_SHORT[date.getDay()] + ", " + date.getDate() + " " + CAL_MONTHS[date.getMonth()] + " " + date.getFullYear();
+    }
+
+    function calFormatISO(date) {
+      return date.getFullYear() + "-" + calPad(date.getMonth() + 1) + "-" + calPad(date.getDate());
+    }
+
     // ===== BOOKING MODAL =====
     var bookingPanels = 10;
 
@@ -924,6 +1089,8 @@
       var total = getTotal(bookingPanels);
       document.getElementById("modalPanelInfo").textContent = bookingPanels + " panel" + (bookingPanels !== 1 ? "s" : "");
       document.getElementById("modalPriceInfo").textContent = "\u20AC" + total;
+      calInit();
+      validateBookingForm();
       showModalStep(1);
       document.getElementById("bookingModal").classList.add("open");
       document.body.style.overflow = "hidden";
@@ -960,10 +1127,10 @@
     });
 
     function validateBookingForm() {
-      var ok = ["bkName","bkEmail","bkPhone","bkAddress"].every(function(id) {
+      var fieldsOk = ["bkName","bkEmail","bkPhone","bkAddress"].every(function(id) {
         return document.getElementById(id).value.trim();
       });
-      document.getElementById("btnModalContinue").disabled = !ok;
+      document.getElementById("btnModalContinue").disabled = !(fieldsOk && selectedDate);
     }
 
     function showModalStep(n) {
@@ -977,6 +1144,7 @@
       var total = getTotal(panels);
       document.getElementById("confirmService").textContent = panels + " panel clean";
       document.getElementById("confirmAddress").textContent = document.getElementById("bkAddress").value;
+      document.getElementById("confirmDate").textContent = selectedDate ? calFormatNice(selectedDate) : "";
       document.getElementById("confirmEmail").textContent = document.getElementById("bkEmail").value;
       document.getElementById("confirmPanelLine").textContent = panels + " panels \u00D7 \u20AC7";
       document.getElementById("confirmPanelCost").textContent = "\u20AC" + (panels * PER_PANEL);
@@ -992,12 +1160,13 @@
       showModalStep(3);
 
       var payload = {
-        name:       document.getElementById("bkName").value.trim(),
-        email:      document.getElementById("bkEmail").value.trim(),
-        phone:      document.getElementById("bkPhone").value.trim(),
-        address:    document.getElementById("bkAddress").value.trim(),
-        eircode:    document.getElementById("bkEircode").value.trim(),
-        panelCount: bookingPanels,
+        name:           document.getElementById("bkName").value.trim(),
+        email:          document.getElementById("bkEmail").value.trim(),
+        phone:          document.getElementById("bkPhone").value.trim(),
+        address:        document.getElementById("bkAddress").value.trim(),
+        eircode:        document.getElementById("bkEircode").value.trim(),
+        panelCount:     bookingPanels,
+        preferred_date: selectedDate ? calFormatISO(selectedDate) : "",
       };
 
       fetch("/.netlify/functions/create-checkout", {
