@@ -1340,17 +1340,35 @@
     function submitContactForm() {
       var name    = document.getElementById("ctName").value.trim();
       var email   = document.getElementById("ctEmail").value.trim();
+      var phone   = document.getElementById("ctPhone").value.trim();
       var message = document.getElementById("ctMessage").value.trim();
       if (!name || !email || !message) {
         alert("Please fill in your name, email, and message.");
         return;
       }
-      // TODO: Wire up to backend — POST to /.netlify/functions/contact with { name, email, phone, message }
-      document.getElementById("ctName").value    = "";
-      document.getElementById("ctEmail").value   = "";
-      document.getElementById("ctPhone").value   = "";
-      document.getElementById("ctMessage").value = "";
-      showModalPanel('modalStepContactSuccess');
+      var btn = document.querySelector("#modalStepContact .btn-continue");
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      fetch("/.netlify/functions/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name, email: email, phone: phone, message: message }),
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error("Send failed");
+        document.getElementById("ctName").value    = "";
+        document.getElementById("ctEmail").value   = "";
+        document.getElementById("ctPhone").value   = "";
+        document.getElementById("ctMessage").value = "";
+        showModalPanel('modalStepContactSuccess');
+      })
+      .catch(function() {
+        alert("Sorry, something went wrong. Please try again or call us directly.");
+      })
+      .finally(function() {
+        btn.disabled = false;
+        btn.textContent = "Send Message";
+      });
     }
 
     // ===== REVIEWS =====
