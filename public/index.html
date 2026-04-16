@@ -480,6 +480,61 @@
     .footer-brand span { font-family:var(--ff-display); font-size:20px; color:var(--ink); font-weight:700; }
     .footer a { color:var(--scrub); font-weight:500; }
 
+    /* ===== FIELD TEXTAREA ===== */
+    .field textarea {
+      width:100%; padding:12px 16px; border-radius:10px;
+      border:1.5px solid var(--ink-faint); background:var(--bg);
+      color:var(--ink); font-size:15px; outline:none;
+      font-family:var(--ff-body); transition:border .2s; resize:vertical;
+    }
+    .field textarea::placeholder { color:var(--ink-light); }
+    .field textarea:focus { border-color:var(--scrub); background:var(--white); }
+
+    /* ===== MODAL CHOICE SCREEN ===== */
+    .modal-choice-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:28px 0 8px;
+    }
+    .modal-choice-card {
+      background:var(--bg-card); border:1.5px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:28px 20px; text-align:center;
+      cursor:pointer; transition:all .25s; display:flex;
+      flex-direction:column; align-items:center; gap:10px;
+    }
+    .modal-choice-card:hover {
+      border-color:var(--scrub); transform:translateY(-4px);
+      box-shadow:0 8px 24px rgba(13,148,136,.10);
+    }
+    .modal-choice-icon {
+      width:52px; height:52px; border-radius:14px;
+      display:flex; align-items:center; justify-content:center; margin-bottom:4px;
+    }
+    .modal-choice-card h4 { font-size:16px; color:var(--ink); font-weight:700; margin:0; }
+    .modal-choice-card p { font-size:13px; color:var(--ink-mid); margin:0; line-height:1.4; }
+
+    /* ===== ABOUT SECTION ===== */
+    .team-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:700px;
+    }
+    .team-card {
+      background:var(--bg-card); border:1px solid var(--ink-faint);
+      border-radius:var(--radius-lg); padding:36px 28px; text-align:center;
+      transition:all .35s;
+    }
+    .team-card:hover { transform:translateY(-6px); box-shadow:0 12px 32px rgba(0,0,0,.08); }
+    .team-photo {
+      width:200px; height:200px; border-radius:50%;
+      background:var(--bg-warm); border:3px solid var(--sun);
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 24px; overflow:hidden;
+    }
+    .team-photo svg { opacity:.45; }
+    .team-name { font-size:20px; color:var(--ink); font-weight:700; margin-bottom:4px; }
+    .team-role {
+      font-size:13px; color:var(--scrub); font-weight:600;
+      text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px;
+    }
+    .team-bio { font-size:14px; color:var(--ink-mid); line-height:1.6; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width:768px) {
       .nav-links { display:none; }
@@ -490,6 +545,8 @@
       .review-form-row { flex-direction:column; gap:0; }
       .review-form-row .field { margin-bottom:16px; }
       .modal { padding:32px 24px; }
+      .modal-choice-grid { grid-template-columns:1fr; }
+      .team-grid { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -510,6 +567,7 @@
       <a href="#why">Why Clean</a>
       <a href="#how-often">How Often</a>
       <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
       <a href="#faq">FAQ</a>
     </div>
     <button class="btn-primary" onclick="handleBookNow()">Book Now</button>
@@ -773,6 +831,40 @@
     </div>
   </section>
 
+  <!-- ABOUT US -->
+  <div class="divider"></div>
+  <section class="section reveal" id="about">
+    <div class="section-eyebrow">About Us</div>
+    <h2 class="section-title">The team behind SolarScrub</h2>
+    <p class="section-sub">Two Trinity College Dublin students on a mission to keep Dublin's solar panels spotless.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <!-- Replace src with actual photo -->
+        <div class="team-photo">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="30" r="18" fill="var(--ink-light)"/>
+            <path d="M8 76c0-17.673 14.327-32 32-32s32 14.327 32 32" fill="var(--ink-light)"/>
+          </svg>
+        </div>
+        <div class="team-name">Ryan Nichols</div>
+        <div class="team-role">Co-Founder</div>
+        <p class="team-bio">1st year Computer Science and Business student at Trinity College Dublin.</p>
+      </div>
+      <div class="team-card">
+        <!-- Replace src with actual photo -->
+        <div class="team-photo">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="30" r="18" fill="var(--ink-light)"/>
+            <path d="M8 76c0-17.673 14.327-32 32-32s32 14.327 32 32" fill="var(--ink-light)"/>
+          </svg>
+        </div>
+        <div class="team-name">Ethan Gavin</div>
+        <div class="team-role">Co-Founder</div>
+        <p class="team-bio">1st year Political Science and History student at Trinity College Dublin.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <div class="divider"></div>
   <section class="section reveal" id="faq">
@@ -820,6 +912,34 @@
   <div class="modal-overlay" id="bookingModal">
     <div class="modal" onclick="event.stopPropagation()">
       <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+
+      <!-- STEP 0: Choice Screen -->
+      <div id="modalStepChoice">
+        <h3>How can we help?</h3>
+        <p class="modal-sub">Choose an option below to get started.</p>
+        <div class="modal-choice-grid">
+          <div class="modal-choice-card" onclick="showModalPanel('modalStep1')">
+            <div class="modal-choice-icon" style="background:#F0FDF4;">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <rect x="3" y="5" width="22" height="20" rx="3" stroke="var(--scrub)" stroke-width="2" fill="none"/>
+                <path d="M19 3v4M9 3v4M3 11h22" stroke="var(--scrub)" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h4>Book a Clean</h4>
+            <p>Pick a date and pay online</p>
+          </div>
+          <div class="modal-choice-card" onclick="showModalPanel('modalStepContact')">
+            <div class="modal-choice-icon" style="background:#EFF6FF;">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <rect x="3" y="6" width="22" height="16" rx="3" stroke="#3B82F6" stroke-width="2" fill="none"/>
+                <path d="M3 9l11 7 11-7" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h4>Contact Us</h4>
+            <p>Ask a question or request a quote</p>
+          </div>
+        </div>
+      </div>
 
       <!-- STEP 1: Customer Details -->
       <div id="modalStep1">
@@ -910,6 +1030,31 @@
         <p id="modalErrorMsg" style="color:var(--ink-mid);font-size:14px;margin-bottom:24px;"></p>
         <button class="btn-outline" onclick="backToDetails()">Try Again</button>
       </div>
+
+      <!-- STEP CONTACT: Contact Form -->
+      <div id="modalStepContact" style="display:none;">
+        <h3>Get in Touch</h3>
+        <p class="modal-sub">We'll get back to you within 24 hours.</p>
+        <div class="field"><label>Full Name</label><input type="text" id="ctName" placeholder="Aoife Murphy" /></div>
+        <div class="field"><label>Email</label><input type="email" id="ctEmail" placeholder="aoife@example.ie" /></div>
+        <div class="field">
+          <label>Phone <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+          <input type="tel" id="ctPhone" placeholder="085 123 4567" />
+        </div>
+        <div class="field"><label>Message</label><textarea id="ctMessage" rows="5" placeholder="How can we help?"></textarea></div>
+        <button class="btn-continue" onclick="submitContactForm()">Send Message</button>
+        <button class="btn-back" onclick="showModalPanel('modalStepChoice')">← Back</button>
+      </div>
+
+      <!-- STEP CONTACT SUCCESS -->
+      <div id="modalStepContactSuccess" style="display:none;text-align:center;padding:48px 0;">
+        <div style="width:64px;height:64px;border-radius:50%;margin:0 auto 20px;background:var(--scrub-light);display:flex;align-items:center;justify-content:center;">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><polyline points="5,14 11,20 23,8" stroke="var(--scrub)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 style="font-family:var(--ff-display);color:var(--ink);font-size:20px;margin-bottom:8px;">Message sent!</h3>
+        <p style="color:var(--ink-mid);font-size:14px;margin-bottom:24px;">Thanks — we'll get back to you within 24 hours.</p>
+        <button class="btn-outline" onclick="closeModal()">Close</button>
+      </div>
     </div>
   </div>
 
@@ -929,7 +1074,7 @@
       <span>Solar<span style="color:var(--sun)">Scrub</span></span>
     </div>
     <p>Dublin-based solar panel cleaning · Fully insured · Eco-friendly</p>
-    <p style="margin-top:8px"><a href="tel:+353871134236">0871134236</a><!-- · <a href="mailto:hello@solarscrub.ie">hello@solarscrub.ie</a> --></p>
+    <p style="margin-top:8px"><a href="tel:+353871134236">0871134236</a><!-- Uncomment when domain email is ready: · <a href="mailto:hello@solarscrub.ie">hello@solarscrub.ie</a> --></p>
     <p style="margin-top:16px;font-size:11px;color:var(--ink-light)">&copy; 2026 SolarScrub. All rights reserved.</p>
   </footer>
 
@@ -1091,7 +1236,7 @@
       document.getElementById("modalPriceInfo").textContent = "\u20AC" + total;
       calInit();
       validateBookingForm();
-      showModalStep(1);
+      showModalPanel('modalStepChoice');
       document.getElementById("bookingModal").classList.add("open");
       document.body.style.overflow = "hidden";
     }
@@ -1133,11 +1278,14 @@
       document.getElementById("btnModalContinue").disabled = !(fieldsOk && selectedDate);
     }
 
-    function showModalStep(n) {
-      [1,2,3,4].forEach(function(i) {
-        document.getElementById("modalStep" + i).style.display = i === n ? "block" : "none";
+    var MODAL_PANELS = ['modalStepChoice','modalStep1','modalStep2','modalStep3','modalStep4','modalStepContact','modalStepContactSuccess'];
+    function showModalPanel(id) {
+      MODAL_PANELS.forEach(function(pid) {
+        var el = document.getElementById(pid);
+        if (el) el.style.display = pid === id ? 'block' : 'none';
       });
     }
+    function showModalStep(n) { showModalPanel('modalStep' + n); }
 
     function goToConfirm() {
       var panels = bookingPanels;
@@ -1186,6 +1334,23 @@
         document.getElementById("modalErrorMsg").textContent = err.message || "Please try again.";
         showModalStep(4);
       });
+    }
+
+    // ===== CONTACT FORM =====
+    function submitContactForm() {
+      var name    = document.getElementById("ctName").value.trim();
+      var email   = document.getElementById("ctEmail").value.trim();
+      var message = document.getElementById("ctMessage").value.trim();
+      if (!name || !email || !message) {
+        alert("Please fill in your name, email, and message.");
+        return;
+      }
+      // TODO: Wire up to backend — POST to /.netlify/functions/contact with { name, email, phone, message }
+      document.getElementById("ctName").value    = "";
+      document.getElementById("ctEmail").value   = "";
+      document.getElementById("ctPhone").value   = "";
+      document.getElementById("ctMessage").value = "";
+      showModalPanel('modalStepContactSuccess');
     }
 
     // ===== REVIEWS =====
