@@ -792,18 +792,6 @@
     </div>
   </section>
 
-  <!-- REVIEWS -->
-  <div class="divider"></div>
-  <section class="section reveal" id="reviews">
-    <div class="section-eyebrow">Reviews</div>
-    <h2 class="section-title">What our customers say</h2>
-    <p class="section-sub">Real experiences from Dublin homeowners — read them all and leave your own.</p>
-    <div id="reviewsPreviewGrid" class="reviews-grid" style="margin-bottom:36px;"></div>
-    <a href="/reviews" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
-      Read all reviews &amp; leave yours
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </section>
 
   <!-- ABOUT US -->
   <div class="divider"></div>
@@ -1345,26 +1333,6 @@
       });
     }
 
-    // ===== REVIEWS PREVIEW (up to 3 most recent) =====
-    fetch("/.netlify/functions/reviews")
-      .then(function(res) { return res.ok ? res.json() : []; })
-      .then(function(reviews) {
-        var grid = document.getElementById("reviewsPreviewGrid");
-        if (!reviews || reviews.length === 0) return;
-        grid.innerHTML = reviews.slice(0, 3).map(function(r) {
-          var stars = "\u2605".repeat(r.stars) + "\u2606".repeat(5 - r.stars);
-          var escaped = r.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-          var name = r.name.replace(/</g, "&lt;");
-          var area = (r.area || "").replace(/</g, "&lt;");
-          return '<div class="review-card">' +
-            '<div class="review-stars">' + stars + '</div>' +
-            '<p>\u201C' + escaped + '\u201D</p>' +
-            '<div class="review-author">' + name + '</div>' +
-            (area ? '<div class="review-area">' + area + '</div>' : '') +
-            '</div>';
-        }).join("");
-      })
-      .catch(function() {});
 
     // ===== CHECK RETURN FROM STRIPE =====
     (function() {
