@@ -568,6 +568,7 @@
       <a href="#how-often">How Often</a>
       <a href="#pricing">Pricing</a>
       <a href="#about">About</a>
+      <a href="/reviews">Reviews</a>
       <a href="#faq">FAQ</a>
     </div>
     <button class="btn-primary" onclick="handleBookNow()">Book Now</button>
@@ -796,39 +797,12 @@
   <section class="section reveal" id="reviews">
     <div class="section-eyebrow">Reviews</div>
     <h2 class="section-title">What our customers say</h2>
-    <p class="section-sub">Had a SolarScrub clean? We'd love to hear how it went.</p>
-
-    <div id="reviewsContainer" class="reviews-grid" style="margin-bottom:48px;">
-      <!-- Reviews will appear here -->
-    </div>
-    <p id="noReviewsMsg" class="no-reviews-msg">No reviews yet — be the first to share your experience.</p>
-
-    <div class="review-form-card">
-      <h4>Leave a review</h4>
-      <div class="review-star-input" id="starInput">
-        <span class="star-btn" data-star="1">★</span>
-        <span class="star-btn" data-star="2">★</span>
-        <span class="star-btn" data-star="3">★</span>
-        <span class="star-btn" data-star="4">★</span>
-        <span class="star-btn" data-star="5">★</span>
-      </div>
-      <div class="review-form-row">
-        <div class="field" style="flex:1;margin-bottom:0;">
-          <label for="reviewName">Your Name</label>
-          <input type="text" id="reviewName" placeholder="Aoife M." />
-        </div>
-        <div class="field" style="flex:1;margin-bottom:0;">
-          <label for="reviewArea">Area</label>
-          <input type="text" id="reviewArea" placeholder="Blackrock" />
-        </div>
-      </div>
-      <div class="field" style="margin-top:16px;">
-        <label for="reviewText">Your Review</label>
-        <textarea id="reviewText" rows="3" placeholder="How was your experience with SolarScrub?"></textarea>
-      </div>
-      <button class="btn-primary" style="margin-top:12px;width:100%;" onclick="submitReview()">Submit Review</button>
-      <p id="reviewSuccess" class="review-success" style="display:none;">Thanks for your review — it's now visible above.</p>
-    </div>
+    <p class="section-sub">Real experiences from Dublin homeowners — read them all and leave your own.</p>
+    <div id="reviewsPreviewGrid" class="reviews-grid" style="margin-bottom:36px;"></div>
+    <a href="/reviews" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
+      Read all reviews &amp; leave yours
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </section>
 
   <!-- ABOUT US -->
@@ -1371,93 +1345,26 @@
       });
     }
 
-    // ===== REVIEWS =====
-    var selectedStars = 0;
-
-    document.querySelectorAll(".star-btn").forEach(function(btn) {
-      btn.addEventListener("click", function() {
-        selectedStars = parseInt(btn.dataset.star);
-        document.querySelectorAll(".star-btn").forEach(function(s, i) {
-          s.classList.toggle("active", i < selectedStars);
-        });
-      });
-      btn.addEventListener("mouseenter", function() {
-        var hover = parseInt(btn.dataset.star);
-        document.querySelectorAll(".star-btn").forEach(function(s, i) {
-          s.style.color = i < hover ? "var(--sun-glow)" : "";
-        });
-      });
-      btn.addEventListener("mouseleave", function() {
-        document.querySelectorAll(".star-btn").forEach(function(s) {
-          s.style.color = "";
-        });
-      });
-    });
-
-    function loadReviews() {
-      fetch("/.netlify/functions/reviews")
-        .then(function(res) { return res.ok ? res.json() : []; })
-        .then(function(reviews) { renderReviews(reviews); })
-        .catch(function() { /* show empty state */ });
-    }
-
-    function renderReviews(reviews) {
-      var container = document.getElementById("reviewsContainer");
-      var noMsg = document.getElementById("noReviewsMsg");
-
-      if (!reviews || reviews.length === 0) {
-        container.innerHTML = "";
-        noMsg.style.display = "block";
-        return;
-      }
-
-      noMsg.style.display = "none";
-      container.innerHTML = reviews.map(function(r) {
-        var stars = "\u2605".repeat(r.stars) + "\u2606".repeat(5 - r.stars);
-        var escaped = r.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        var name = r.name.replace(/</g, "&lt;");
-        var area = (r.area || "").replace(/</g, "&lt;");
-        return '<div class="review-card">' +
-          '<div class="review-stars">' + stars + '</div>' +
-          '<p>\u201C' + escaped + '\u201D</p>' +
-          '<div class="review-author">' + name + '</div>' +
-          (area ? '<div class="review-area">' + area + '</div>' : '') +
-          '</div>';
-      }).join("");
-    }
-
-    function submitReview() {
-      var name = document.getElementById("reviewName").value.trim();
-      var area = document.getElementById("reviewArea").value.trim();
-      var text = document.getElementById("reviewText").value.trim();
-
-      if (!name || !text || selectedStars === 0) {
-        alert("Please fill in your name, write a review, and select a star rating.");
-        return;
-      }
-
-      fetch("/.netlify/functions/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name, area: area, text: text, stars: selectedStars }),
+    // ===== REVIEWS PREVIEW (up to 3 most recent) =====
+    fetch("/.netlify/functions/reviews")
+      .then(function(res) { return res.ok ? res.json() : []; })
+      .then(function(reviews) {
+        var grid = document.getElementById("reviewsPreviewGrid");
+        if (!reviews || reviews.length === 0) return;
+        grid.innerHTML = reviews.slice(0, 3).map(function(r) {
+          var stars = "\u2605".repeat(r.stars) + "\u2606".repeat(5 - r.stars);
+          var escaped = r.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          var name = r.name.replace(/</g, "&lt;");
+          var area = (r.area || "").replace(/</g, "&lt;");
+          return '<div class="review-card">' +
+            '<div class="review-stars">' + stars + '</div>' +
+            '<p>\u201C' + escaped + '\u201D</p>' +
+            '<div class="review-author">' + name + '</div>' +
+            (area ? '<div class="review-area">' + area + '</div>' : '') +
+            '</div>';
+        }).join("");
       })
-      .then(function(res) {
-        if (res.ok) {
-          document.getElementById("reviewName").value = "";
-          document.getElementById("reviewArea").value = "";
-          document.getElementById("reviewText").value = "";
-          selectedStars = 0;
-          document.querySelectorAll(".star-btn").forEach(function(s) { s.classList.remove("active"); });
-          var msg = document.getElementById("reviewSuccess");
-          msg.style.display = "block";
-          setTimeout(function() { msg.style.display = "none"; }, 4000);
-          loadReviews();
-        }
-      })
-      .catch(function() { alert("Failed to submit review. Please try again."); });
-    }
-
-    loadReviews();
+      .catch(function() {});
 
     // ===== CHECK RETURN FROM STRIPE =====
     (function() {
